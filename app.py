@@ -32,10 +32,10 @@ def submit():
 
     # Create a record in Salesforce
     try:
-        sf.Work_Hours__c.create(data)
-        return redirect('/')
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+    sf.Timesheet__c.create(data)
+    return redirect('/')
+except Exception as e:
+    return f"An error occurred: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
