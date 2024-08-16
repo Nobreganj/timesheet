@@ -71,7 +71,7 @@
             color: #333;
         }
 
-        input {
+        input, select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -80,11 +80,6 @@
         }
 
         input[type="date"] {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 100%;
-            box-sizing: border-box;
             background-color: #fff;
             font-family: inherit;
             font-size: inherit;
@@ -160,15 +155,32 @@
         <h1>New Timesheet</h1>
         <form action="/submit" method="post">
             <div class="input-group">
+                <label for="users">* Users</label>
+                <input type="text" id="users" name="Users__c" list="userList" required>
+                <datalist id="userList">
+                    <option value="James Brown">
+                    <option value="Luca Licata">
+                    <option value="Tim East">
+                    <option value="Alberto Garcia">
+                    <option value="Winnie Woo">
+                    <option value="Catalina Jimenez">
+                    <option value="Samuel Gomez">
+                    <option value="Mario Benita">
+                    <option value="Esteban Medina">
+                    <option value="Cinzia Cervini">
+                    <option value="Constantino Dias"> 
+                    <option value="Ronald Fung"> 
+                    <option value="Kevin Yip">     
+                    <!-- Add more options as needed -->
+                </datalist>
+            </div>
+            <div class="input-group">
                 <label for="startDate">* Start Date</label>
                 <input type="date" id="startDate" name="Start_Date__c" required>
             </div>
             <div class="input-group">
                 <label for="endDate">* End Date</label>
                 <input type="date" id="endDate" name="End_Date__c" required>
-            </div>
-            <div class="input-group">
-                <input type="text" name="Users__c" placeholder="Users" required>
             </div>
             <div class="input-group">
                 <input type="number" step="0.01" name="Hours_Spent__c" placeholder="Hours Spent" required>
