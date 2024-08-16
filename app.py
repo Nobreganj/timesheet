@@ -4,13 +4,15 @@ import os
 
 app = Flask(__name__)
 
-# Salesforce authentication
-sf = Salesforce(
-    username=os.environ['SALESFORCE_USERNAME'],
-    password=os.environ['SALESFORCE_PASSWORD'],
-    security_token=os.environ['SALESFORCE_SECURITY_TOKEN'],
-    domain='login'  # Use 'test' if you're using Salesforce sandbox
-)
+def authenticate_salesforce():
+    return Salesforce(
+        username=os.environ['SALESFORCE_USERNAME'],
+        password=os.environ['SALESFORCE_PASSWORD'],
+        security_token=os.environ['SALESFORCE_SECURITY_TOKEN'],
+        domain='login'  # Use 'test' if you're using Salesforce sandbox
+    )
+
+sf = authenticate_salesforce()
 
 @app.route('/')
 def index():
@@ -18,24 +20,26 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Capture form data
-    data = {
-        'Start_Date__c': request.form['Start_Date__c'],
-        'End_Date__c': request.form['End_Date__c'],
-        'Users__c': request.form['Users__c'],
-        'Hours_Spent__c': request.form['Hours_Spent__c'],
-        'Work_Type__c': request.form['Work_Type__c'],
-        'Work_Description__c': request.form['Work_Description__c'],
-        'Proposal__c': request.form['Proposal__c'],
-        'Account__c': request.form['Account__c']
-    }
-
-    # Create a record in Salesforce
+    global sf
     try:
+        # Capture form data
+        data = request.form.to_dict()
+
+        # Attempt to create a record in Salesforce
         sf.Timesheet__c.create(data)
+
         return redirect('/')
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        # Check if the session has expired or is invalid, and re-authenticate if necessary
+        if 'INVALID_SESSION_ID' in str(e):
+            sf = authenticate_salesforce()  # Re-authenticate
+            try:
+                sf.Timesheet__c.create(data)  # Retry the operation
+                return redirect('/')
+            except Exception as retry_error:
+                return f"An error occurred: {str(retry_error)}"
+        else:
+            return f"An error occurred: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
