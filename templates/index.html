@@ -79,8 +79,15 @@
             box-sizing: border-box;
         }
 
-        textarea {
-            resize: vertical;
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-family: inherit;
+            font-size: inherit;
         }
 
         .button-group {
@@ -153,10 +160,12 @@
         <h1>New Timesheet</h1>
         <form action="/submit" method="post">
             <div class="input-group">
-                <input type="text" name="Start_Date__c" placeholder="Start Date (YYYY-MM-DD)" required>
+                <label for="startDate">* Start Date</label>
+                <input type="date" id="startDate" name="Start_Date__c" required>
             </div>
             <div class="input-group">
-                <input type="text" name="End_Date__c" placeholder="End Date (YYYY-MM-DD)" required>
+                <label for="endDate">* End Date</label>
+                <input type="date" id="endDate" name="End_Date__c" required>
             </div>
             <div class="input-group">
                 <input type="text" name="Users__c" placeholder="Users" required>
