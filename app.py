@@ -24,7 +24,7 @@ def index():
 @app.route('/get_proposals', methods=['GET'])
 def get_proposals():
     try:
-        # Query Salesforce for Proposal records
+        # Query the Proposal__c object for records
         proposals = sf.query_all("SELECT Id, Name FROM Proposal__c")
 
         # Create a list of proposals with their ID and Name
