@@ -198,7 +198,7 @@
                     <option value="Tim East"> 
                     <option value="Rodrigo Torres"> 
                     <option value="Winnie Woo"> 
-                    <option value="Ximo Michavila">     
+                    <option value="Ximo Michavila">
                     <!-- Add more options as needed -->
                 </datalist>
             </div>
@@ -220,7 +220,10 @@
                 <input type="text" name="Work_Description__c" placeholder="Work Description" required>
             </div>
             <div class="input-group">
-                <input type="text" name="Proposal__c" placeholder="Proposal" required>
+                <label for="proposal">* Proposal</label>
+                <select id="proposal" name="Proposals__c" required>
+                    <!-- Options will be populated dynamically -->
+                </select>
             </div>
             <div class="input-group">
                 <input type="text" name="Account__c" placeholder="Account" required>
@@ -230,5 +233,28 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/get_proposals');
+                const data = await response.json();
+
+                if (response.ok) {
+                    const proposalSelect = document.getElementById('proposal');
+                    data.proposals.forEach(proposal => {
+                        const option = document.createElement('option');
+                        option.value = proposal.id; // Store the Salesforce ID as the value
+                        option.text = proposal.name;
+                        proposalSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Error fetching proposals:', data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
 </body>
 </html>
