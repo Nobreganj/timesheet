@@ -143,6 +143,22 @@
             }
         }
     </style>
+    <script>
+        function syncEndDate() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate');
+            endDate.value = startDate;
+        }
+
+        window.onload = function() {
+            const startDateField = document.getElementById('startDate');
+            startDateField.addEventListener('change', syncEndDate);
+
+            // Initially hide the End Date field
+            const endDateGroup = document.getElementById('endDateGroup');
+            endDateGroup.style.display = 'none';
+        }
+    </script>
 </head>
 <body>
     <div class="video-background">
@@ -159,46 +175,6 @@
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
                     <option value="Adrián Ortiz">
-                    <option value="Alberto García">
-                    <option value="Alex Casariego">
-                    <option value="Amit Sanghvi">
-                    <option value="Aurelija Raskeviciute">
-                    <option value="Becky Clements">
-                    <option value="Benito Alvarez">
-                    <option value="Bianca Shirk">
-                    <option value="Caty Jimenez">
-                    <option value="Cinzia Cervini">
-                    <option value="Constantino Dias">
-                    <option value="Antonio Ramirez"> 
-                    <option value="Dwayne Edwards"> 
-                    <option value="Elisa Pena">
-                    <option value="Esteban Medina"> 
-                    <option value="James Brown"> 
-                    <option value="James Hayter"> 
-                    <option value="Fernando Onrubia"> 
-                    <option value="Johnathan Nobrega"> 
-                    <option value="Josh Tuveri"> 
-                    <option value="Katerina Paraschou"> 
-                    <option value="Kinyat yeung"> 
-                    <option value="Katie Craske"> 
-                    <option value="Leigh Warner"> 
-                    <option value="Louis Sibley"> 
-                    <option value="Luca Licata"> 
-                    <option value="Mara Kittel"> 
-                    <option value="Marcos de Castro"> 
-                    <option value="Mario Benita"> 
-                    <option value="Marzena Kufel"> 
-                    <option value="Michael Williamson"> 
-                    <option value="Nick Owen"> 
-                    <option value="Olivia Pinkarchevski"> 
-                    <option value="Peter Sibley"> 
-                    <option value="Jorge polo"> 
-                    <option value="Ruth Buenaposada"> 
-                    <option value="Samuel Gomez"> 
-                    <option value="Tim East"> 
-                    <option value="Rodrigo Torres"> 
-                    <option value="Winnie Woo"> 
-                    <option value="Ximo Michavila">     
                     <!-- Add more options as needed -->
                 </datalist>
             </div>
@@ -206,7 +182,7 @@
                 <label for="startDate">* Start Date</label>
                 <input type="date" id="startDate" name="Start_Date__c" required>
             </div>
-            <div class="input-group">
+            <div class="input-group" id="endDateGroup">
                 <label for="endDate">* End Date</label>
                 <input type="date" id="endDate" name="End_Date__c" required>
             </div>
