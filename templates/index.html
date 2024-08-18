@@ -144,19 +144,26 @@
         }
     </style>
     <script>
-        function syncEndDate() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate');
-            endDate.value = startDate;
+        function toggleFields() {
+            const workType = document.getElementById('workType').value;
+            const accountGroup = document.getElementById('accountGroup');
+            const proposalGroup = document.getElementById('proposalGroup');
+
+            if (workType === 'Non Project Work') {
+                accountGroup.style.display = 'block';
+                proposalGroup.style.display = 'none';
+            } else if (workType === 'Project Work') {
+                accountGroup.style.display = 'none';
+                proposalGroup.style.display = 'block';
+            } else {
+                accountGroup.style.display = 'none';
+                proposalGroup.style.display = 'none';
+            }
         }
 
         window.onload = function() {
-            const startDateField = document.getElementById('startDate');
-            startDateField.addEventListener('change', syncEndDate);
-
-            // Initially hide the End Date field
-            const endDateGroup = document.getElementById('endDateGroup');
-            endDateGroup.style.display = 'none';
+            toggleFields(); // Initialize the fields on page load
+            document.getElementById('workType').addEventListener('change', toggleFields);
         }
     </script>
 </head>
@@ -175,6 +182,46 @@
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
                     <option value="Adrián Ortiz">
+                    <option value="Alberto García">
+                    <option value="Alex Casariego">
+                    <option value="Amit Sanghvi">
+                    <option value="Aurelija Raskeviciute">
+                    <option value="Becky Clements">
+                    <option value="Benito Alvarez">
+                    <option value="Bianca Shirk">
+                    <option value="Caty Jimenez">
+                    <option value="Cinzia Cervini">
+                    <option value="Constantino Dias">
+                    <option value="Antonio Ramirez"> 
+                    <option value="Dwayne Edwards"> 
+                    <option value="Elisa Pena">
+                    <option value="Esteban Medina"> 
+                    <option value="James Brown"> 
+                    <option value="James Hayter"> 
+                    <option value="Fernando Onrubia"> 
+                    <option value="Johnathan Nobrega"> 
+                    <option value="Josh Tuveri"> 
+                    <option value="Katerina Paraschou"> 
+                    <option value="Kinyat yeung"> 
+                    <option value="Katie Craske"> 
+                    <option value="Leigh Warner"> 
+                    <option value="Louis Sibley"> 
+                    <option value="Luca Licata"> 
+                    <option value="Mara Kittel"> 
+                    <option value="Marcos de Castro"> 
+                    <option value="Mario Benita"> 
+                    <option value="Marzena Kufel"> 
+                    <option value="Michael Williamson"> 
+                    <option value="Nick Owen"> 
+                    <option value="Olivia Pinkarchevski"> 
+                    <option value="Peter Sibley"> 
+                    <option value="Jorge polo"> 
+                    <option value="Ruth Buenaposada"> 
+                    <option value="Samuel Gomez"> 
+                    <option value="Tim East"> 
+                    <option value="Rodrigo Torres"> 
+                    <option value="Winnie Woo"> 
+                    <option value="Ximo Michavila">
                     <!-- Add more options as needed -->
                 </datalist>
             </div>
@@ -182,24 +229,29 @@
                 <label for="startDate">* Start Date</label>
                 <input type="date" id="startDate" name="Start_Date__c" required>
             </div>
-            <div class="input-group" id="endDateGroup">
-                <label for="endDate">* End Date</label>
-                <input type="date" id="endDate" name="End_Date__c" required>
+            <div class="input-group">
+                <label for="hoursSpent">* Hours Spent</label>
+                <input type="number" step="0.01" id="hoursSpent" name="Hours_Spent__c" placeholder="Hours Spent" required>
             </div>
             <div class="input-group">
-                <input type="number" step="0.01" name="Hours_Spent__c" placeholder="Hours Spent" required>
+                <label for="workType">* Work Type</label>
+                <select id="workType" name="Work_Type__c" required>
+                    <option value="">--Select Work Type--</option>
+                    <option value="Non Project Work">Non Project Work</option>
+                    <option value="Project Work">Project Work</option>
+                </select>
+            </div>
+            <div class="input-group" id="accountGroup" style="display: none;">
+                <label for="account">* Account</label>
+                <input type="text" id="account" name="Account__c" placeholder="Account">
+            </div>
+            <div class="input-group" id="proposalGroup" style="display: none;">
+                <label for="proposal">* Proposal</label>
+                <input type="text" id="proposal" name="Proposal__c" placeholder="Proposal">
             </div>
             <div class="input-group">
-                <input type="text" name="Work_Type__c" placeholder="Work Type" required>
-            </div>
-            <div class="input-group">
-                <input type="text" name="Work_Description__c" placeholder="Work Description" required>
-            </div>
-            <div class="input-group">
-                <input type="text" name="Proposal__c" placeholder="Proposal" required>
-            </div>
-            <div class="input-group">
-                <input type="text" name="Account__c" placeholder="Account" required>
+                <label for="workDescription">Work Description</label>
+                <input type="text" id="workDescription" name="Work_Description__c" placeholder="Work Description">
             </div>
             <div class="button-group">
                 <button type="submit">Submit</button>
