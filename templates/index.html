@@ -85,6 +85,26 @@
             font-size: inherit;
         }
 
+        .proposal-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .proposal-group span {
+            padding: 10px;
+            background-color: #eee;
+            border: 1px solid #ddd;
+            border-right: none;
+            border-radius: 5px 0 0 5px;
+            font-size: inherit;
+        }
+
+        .proposal-group input {
+            border-radius: 0 5px 5px 0;
+            border-left: none;
+            width: 100%;
+        }
+
         .button-group {
             display: flex;
             justify-content: center;
@@ -159,7 +179,7 @@
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
                     <!-- User options go here -->
-                    <option value="Adrián Ortiz">
+                     <option value="Adrián Ortiz">
                     <option value="Alberto García">
                     <option value="Alex Casariego">
                     <option value="Amit Sanghvi">
@@ -250,6 +270,7 @@
                     <option value="Marketing - LinkedIn/Newsletter/written support">Marketing - LinkedIn/Newsletter/written support</option>
                     <option value="Marketing - film/content creation">Marketing - film/content creation</option>
                     <option value="Marketing - ABC">Marketing - ABC</option>
+                    <!-- Add more options as needed -->
                 </select>
             </div>
             <div class="input-group" id="accountGroup" style="display:none;">
@@ -257,8 +278,11 @@
                 <input type="text" id="account" name="Account__c" placeholder="Account">
             </div>
             <div class="input-group" id="proposalGroup" style="display:none;">
-                <label for="proposal">Proposal</label>
-                <input type="text" id="proposal" name="Proposal__c" placeholder="Proposal">
+                <label for="proposal">* Proposal</label>
+                <div class="proposal-group">
+                    <span>P-</span>
+                    <input type="text" id="proposal" name="Proposal__c" placeholder="12345" required pattern="\d{5}" maxlength="5">
+                </div>
             </div>
             <div class="input-group">
                 <label for="workDescription">Work Description</label>
