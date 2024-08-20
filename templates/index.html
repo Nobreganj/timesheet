@@ -231,10 +231,19 @@
                 <label for="hoursSpent">* Hours Spent</label>
                 <input type="number" step="0.01" id="hoursSpent" name="Hours_Spent__c" placeholder="Hours Spent" required>
             </div>
-            <div class="input-group">
-                 <label for="workType">* Project Work Type</label>
+           <div class="input-group">
+                <label for="workType">* Project Work Type</label>
                 <select id="workType" name="Project_Work_Type__c" required onchange="toggleFields()">
-                     <option value="">--Select Specific Work Type--</option>
+                    <option value="">--Select Work Type--</option>
+                    <option value="Non Project Work">Non Project Work</option>
+                    <option value="Project Work">Project Work</option>
+                </select>
+            </div>
+            <div class="input-group" id="workTypeGroup">
+                <label for="specificWorkType">Work Type</label>
+                <select id="specificWorkType" name="Work_Type__c">
+                    <option value="">--Select Specific Work Type--</option>
+                    <option value="">--Select Specific Work Type--</option>
                     <option value="Capture">Capture</option>
                     <option value="Client Meeting">Client Meeting</option>
                     <option value="Design Time">Design Time</option>
@@ -262,13 +271,6 @@
                     <option value="Marketing - LinkedIn/Newsletter/written support">Marketing - LinkedIn/Newsletter/written support</option>
                     <option value="Marketing - film/content creation">Marketing - film/content creation</option>
                     <option value="Marketing - ABC">Marketing - ABC</option>
-                </select>
-            </div>
-            <div class="input-group" id="workTypeGroup">
-                <label for="specificWorkType">Work Type</label>
-                <select id="specificWorkType" name="Work_Type__c">
-                    <option value="">--Select Specific Work Type--</option>
-                    <!-- Add your specific work types here as before -->
                 </select>
             </div>
             <div class="input-group" id="accountGroup" style="display:none;">
