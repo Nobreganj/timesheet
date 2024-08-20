@@ -174,11 +174,12 @@
     <div class="container">
         <img src="https://wtvglobal.com/wp-content/uploads/2022/05/footer-logo-color.png" alt="Logo" class="logo">
         <h1>New Timesheet</h1>
-        <form action="/submit" method="post" onsubmit="formatProposal()">
+        <form action="/submit" method="post" onsubmit="formatProposalAndSetEndDate()">
             <div class="input-group">
                 <label for="users">* Users</label>
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
+                    <!-- User options go here -->
                     <option value="Adrián Ortiz">
                     <option value="Alberto García">
                     <option value="Alex Casariego">
@@ -225,8 +226,9 @@
             </div>
             <div class="input-group">
                 <label for="startDate">* Start Date</label>
-                <input type="date" id="startDate" name="Start_Date__c" required>
+                <input type="date" id="startDate" name="Start_Date__c" required onchange="copyStartDateToEndDate()">
             </div>
+            <input type="hidden" id="endDate" name="End_Date__c">
             <div class="input-group">
                 <label for="hoursSpent">* Hours Spent</label>
                 <input type="number" step="0.01" id="hoursSpent" name="Hours_Spent__c" placeholder="Hours Spent" required>
@@ -242,7 +244,6 @@
             <div class="input-group" id="workTypeGroup">
                 <label for="specificWorkType">Work Type</label>
                 <select id="specificWorkType" name="Work_Type__c">
-                    <option value="">--Select Specific Work Type--</option>
                     <option value="">--Select Specific Work Type--</option>
                     <option value="Capture">Capture</option>
                     <option value="Client Meeting">Client Meeting</option>
@@ -316,11 +317,26 @@
             }
         }
 
-        function formatProposal() {
+        function formatProposalAndSetEndDate() {
             var proposalInput = document.getElementById('proposal');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+
+            // Format proposal
             if (proposalInput.value) {
                 proposalInput.value = 'P-' + proposalInput.value;
             }
+
+            // Set End Date to match Start Date
+            if (startDateInput.value) {
+                endDateInput.value = startDateInput.value;
+            }
+        }
+
+        function copyStartDateToEndDate() {
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+            endDateInput.value = startDateInput.value;
         }
     </script>
 </body>
