@@ -17,28 +17,50 @@
             overflow: hidden;
         }
 
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .container {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
+            max-width: 600px;
             width: 100%;
-            margin: 0 auto;
+            text-align: center;
             z-index: 1;
-            position: relative;
         }
 
         h1 {
-            color: #333;
             margin-bottom: 20px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
         }
 
         .button-group {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         button {
@@ -49,21 +71,65 @@
             cursor: pointer;
             background-color: #28a745;
             color: #fff;
-            text-decoration: none;
+            margin-bottom: 10px;
+            width: 200px;
         }
 
         button:hover {
             background-color: #218838;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="https://videos.pexels.com/video-files/18069235/18069235-uhd_2560_1440_24fps.mp4" type="video/mp4">
+        </video>
+    </div>
     <div class="container">
         <h1>Thank You!</h1>
-        <p>Your timesheet has been submitted successfully.</p>
+        <p>Your timesheet has been successfully submitted.</p>
         <div class="button-group">
             <button onclick="window.location.href='/'">Submit Another Timesheet</button>
-            <button onclick="window.location.href='{{ url_for('index') }}'">Back to Timesheet</button>
+            <button onclick="window.location.href='/'">Back to Timesheet</button>
         </div>
     </div>
 </body>
