@@ -143,29 +143,6 @@
             }
         }
     </style>
-    <script>
-        function toggleFields() {
-            const workType = document.getElementById('workType').value;
-            const accountGroup = document.getElementById('accountGroup');
-            const proposalGroup = document.getElementById('proposalGroup');
-
-            if (workType === 'Non Project Work') {
-                accountGroup.style.display = 'block';
-                proposalGroup.style.display = 'none';
-            } else if (workType === 'Project Work') {
-                accountGroup.style.display = 'none';
-                proposalGroup.style.display = 'block';
-            } else {
-                accountGroup.style.display = 'none';
-                proposalGroup.style.display = 'none';
-            }
-        }
-
-        window.onload = function() {
-            toggleFields(); // Initialize the fields on page load
-            document.getElementById('workType').addEventListener('change', toggleFields);
-        }
-    </script>
 </head>
 <body>
     <div class="video-background">
@@ -181,6 +158,7 @@
                 <label for="users">* Users</label>
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
+                    <!-- User options go here -->
                     <option value="Adrián Ortiz">
                     <option value="Alberto García">
                     <option value="Alex Casariego">
@@ -234,29 +212,80 @@
                 <input type="number" step="0.01" id="hoursSpent" name="Hours_Spent__c" placeholder="Hours Spent" required>
             </div>
             <div class="input-group">
-                <label for="workType">* Work Type</label>
-                <select id="workType" name="Work_Type__c" required>
+                <label for="workType">* Project Work Type</label>
+                <select id="workType" name="Project_Work_Type__c" required onchange="toggleFields()">
                     <option value="">--Select Work Type--</option>
                     <option value="Non Project Work">Non Project Work</option>
                     <option value="Project Work">Project Work</option>
                 </select>
             </div>
-            <div class="input-group" id="accountGroup" style="display: none;">
-                <label for="account">* Account</label>
+            <div class="input-group" id="workTypeGroup">
+                <label for="specificWorkType">Work Type</label>
+                <select id="specificWorkType" name="Work_Type__c">
+                    <option value="">--Select Specific Work Type--</option>
+                    <option value="Capture">Capture</option>
+                    <option value="Client Meeting">Client Meeting</option>
+                    <option value="Design Time">Design Time</option>
+                    <option value="Internal WTV Meeting">Internal WTV Meeting</option>
+                    <option value="Platform UX/UI">Platform UX/UI</option>
+                    <option value="Portal Testing">Portal Testing</option>
+                    <option value="Post Production Activities">Post Production Activities</option>
+                    <option value="Pre Production Activities">Pre Production Activities</option>
+                    <option value="Pre-Sales Proposal">Pre-Sales Proposal</option>
+                    <option value="Production Live Day">Production Live Day</option>
+                    <option value="Production Setup">Production Setup</option>
+                    <option value="Rehearsals">Rehearsals</option>
+                    <option value="Training">Training</option>
+                    <option value="Other Project Work">Other Project Work</option>
+                    <option value="Holiday">Holiday</option>
+                    <option value="Internal Meetings">Internal Meetings</option>
+                    <option value="HR/People Management">HR/People Management</option>
+                    <option value="Internal Design Time">Internal Design Time</option>
+                    <option value="DealHub/QuotePrep">DealHub/QuotePrep</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Client Admin">Client Admin</option>
+                    <option value="Internal Admin">Internal Admin</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Marketing - Design">Marketing - Design</option>
+                    <option value="Marketing - LinkedIn/Newsletter/written support">Marketing - LinkedIn/Newsletter/written support</option>
+                    <option value="Marketing - film/content creation">Marketing - film/content creation</option>
+                    <option value="Marketing - ABC">Marketing - ABC</option>
+                </select>
+            </div>
+            <div class="input-group" id="accountGroup" style="display:none;">
+                <label for="account">Account</label>
                 <input type="text" id="account" name="Account__c" placeholder="Account">
             </div>
-            <div class="input-group" id="proposalGroup" style="display: none;">
-                <label for="proposal">* Proposal</label>
+            <div class="input-group" id="proposalGroup" style="display:none;">
+                <label for="proposal">Proposal</label>
                 <input type="text" id="proposal" name="Proposal__c" placeholder="Proposal">
             </div>
             <div class="input-group">
                 <label for="workDescription">Work Description</label>
-                <input type="text" id="workDescription" name="Work_Description__c" placeholder="Work Description">
+                <input type="text" id="workDescription" name="Work_Description__c" placeholder="Work Description" required>
             </div>
             <div class="button-group">
                 <button type="submit">Submit</button>
             </div>
         </form>
     </div>
+    <script>
+        function toggleFields() {
+            var workType = document.getElementById("workType").value;
+            var accountGroup = document.getElementById("accountGroup");
+            var proposalGroup = document.getElementById("proposalGroup");
+
+            if (workType === "Non Project Work") {
+                accountGroup.style.display = "block";
+                proposalGroup.style.display = "none";
+            } else if (workType === "Project Work") {
+                accountGroup.style.display = "none";
+                proposalGroup.style.display = "block";
+            } else {
+                accountGroup.style.display = "none";
+                proposalGroup.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
