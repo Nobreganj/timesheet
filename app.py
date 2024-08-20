@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from simple_salesforce import Salesforce
 import os
 
@@ -25,21 +25,25 @@ def submit():
         # Capture form data
         data = request.form.to_dict()
 
+        # If the proposal field exists, format it to include "P-"
+        if 'Proposal__c' in data and data['Proposal__c']:
+            data['Proposal__c'] = 'P-' + data['Proposal__c']
+
         # Attempt to create a record in Salesforce
         sf.Timesheet__c.create(data)
 
-        return redirect('/')
+        return jsonify({"status": "success", "message": "Thank you, your timesheet has been submitted!"})
     except Exception as e:
         # Check if the session has expired or is invalid, and re-authenticate if necessary
         if 'INVALID_SESSION_ID' in str(e):
             sf = authenticate_salesforce()  # Re-authenticate
             try:
                 sf.Timesheet__c.create(data)  # Retry the operation
-                return redirect('/')
+                return jsonify({"status": "success", "message": "Thank you, your timesheet has been submitted!"})
             except Exception as retry_error:
-                return f"An error occurred: {str(retry_error)}"
+                return jsonify({"status": "error", "message": str(retry_error)})
         else:
-            return f"An error occurred: {str(e)}"
+            return jsonify({"status": "error", "message": str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True)
