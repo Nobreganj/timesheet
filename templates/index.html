@@ -45,10 +45,9 @@
             position: relative;
         }
 
-        form, .message-container {
+        form {
             display: flex;
             flex-direction: column;
-            text-align: center;
         }
 
         h1 {
@@ -65,6 +64,7 @@
 
         .input-group {
             margin-bottom: 15px;
+            text-align: left;
         }
 
         label {
@@ -120,7 +120,6 @@
             cursor: pointer;
             background-color: #28a745;
             color: #fff;
-            margin: 5px;
         }
 
         button:hover {
@@ -172,15 +171,14 @@
             <source src="https://videos.pexels.com/video-files/18069235/18069235-uhd_2560_1440_24fps.mp4" type="video/mp4">
         </video>
     </div>
-    <div class="container" id="formContainer">
+    <div class="container">
         <img src="https://wtvglobal.com/wp-content/uploads/2022/05/footer-logo-color.png" alt="Logo" class="logo">
         <h1>New Timesheet</h1>
-        <form action="/submit" method="post" id="timesheetForm" onsubmit="formatProposal()">
+        <form action="/submit" method="post" onsubmit="formatProposal()">
             <div class="input-group">
                 <label for="users">* Users</label>
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
-                    <!-- User options go here -->
                     <option value="Adrián Ortiz">
                     <option value="Alberto García">
                     <option value="Alex Casariego">
@@ -222,7 +220,7 @@
                     <option value="Rodrigo Torres"> 
                     <option value="Winnie Woo"> 
                     <option value="Ximo Michavila">
-                    <!-- Add more options as needed -->
+                    <!-- Add your user options here as before -->
                 </datalist>
             </div>
             <div class="input-group">
@@ -236,14 +234,6 @@
             <div class="input-group">
                 <label for="workType">* Project Work Type</label>
                 <select id="workType" name="Project_Work_Type__c" required onchange="toggleFields()">
-                    <option value="">--Select Work Type--</option>
-                    <option value="Non Project Work">Non Project Work</option>
-                    <option value="Project Work">Project Work</option>
-                </select>
-            </div>
-            <div class="input-group" id="workTypeGroup">
-                <label for="specificWorkType">Work Type</label>
-                <select id="specificWorkType" name="Work_Type__c">
                     <option value="">--Select Specific Work Type--</option>
                     <option value="Capture">Capture</option>
                     <option value="Client Meeting">Client Meeting</option>
@@ -272,7 +262,13 @@
                     <option value="Marketing - LinkedIn/Newsletter/written support">Marketing - LinkedIn/Newsletter/written support</option>
                     <option value="Marketing - film/content creation">Marketing - film/content creation</option>
                     <option value="Marketing - ABC">Marketing - ABC</option>
-                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div class="input-group" id="workTypeGroup">
+                <label for="specificWorkType">Work Type</label>
+                <select id="specificWorkType" name="Work_Type__c">
+                    <option value="">--Select Specific Work Type--</option>
+                    <!-- Add your specific work types here as before -->
                 </select>
             </div>
             <div class="input-group" id="accountGroup" style="display:none;">
@@ -283,7 +279,7 @@
                 <label for="proposal">* Proposal</label>
                 <div class="proposal-group">
                     <span>P-</span>
-                    <input type="text" id="proposal" name="Proposal__c" placeholder="12345" required pattern="\d{5}" maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <input type="text" id="proposal" name="Proposal__c" placeholder="12345" pattern="\d{5}" maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
             </div>
             <div class="input-group">
@@ -294,13 +290,6 @@
                 <button type="submit">Submit</button>
             </div>
         </form>
-        <div class="message-container" id="messageContainer" style="display:none;">
-            <h2>Thank you, your timesheet has been submitted!</h2>
-            <div class="button-group">
-                <button onclick="submitAnotherTimesheet()">Submit Another Timesheet</button>
-                <button onclick="window.location.href='/timesheets'">Back to Timesheets</button>
-            </div>
-        </div>
     </div>
     <script>
         function toggleFields() {
@@ -308,15 +297,20 @@
             var accountGroup = document.getElementById("accountGroup");
             var proposalGroup = document.getElementById("proposalGroup");
 
+            // Disable required attribute on hidden proposal input
+            var proposalInput = document.getElementById("proposal");
             if (workType === "Non Project Work") {
                 accountGroup.style.display = "block";
                 proposalGroup.style.display = "none";
+                proposalInput.required = false;
             } else if (workType === "Project Work") {
                 accountGroup.style.display = "none";
                 proposalGroup.style.display = "block";
+                proposalInput.required = true;
             } else {
                 accountGroup.style.display = "none";
                 proposalGroup.style.display = "none";
+                proposalInput.required = false;
             }
         }
 
@@ -325,22 +319,6 @@
             if (proposalInput.value) {
                 proposalInput.value = 'P-' + proposalInput.value;
             }
-        }
-
-        document.getElementById("timesheetForm").onsubmit = function(event) {
-            event.preventDefault();
-            formatProposal();  // Call formatProposal before submission
-            // Simulate form submission delay
-            setTimeout(function() {
-                document.getElementById("formContainer").style.display = "none";
-                document.getElementById("messageContainer").style.display = "flex";
-            }, 1000);
-        }
-
-        function submitAnotherTimesheet() {
-            document.getElementById("timesheetForm").reset();
-            document.getElementById("formContainer").style.display = "block";
-            document.getElementById("messageContainer").style.display = "none";
         }
     </script>
 </body>
