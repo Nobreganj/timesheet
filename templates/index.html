@@ -173,7 +173,7 @@
     <div class="container">
         <img src="https://wtvglobal.com/wp-content/uploads/2022/05/footer-logo-color.png" alt="Logo" class="logo">
         <h1>New Timesheet</h1>
-        <form action="/submit" method="post">
+        <form action="/submit" method="post" onsubmit="formatProposal()">
             <div class="input-group">
                 <label for="users">* Users</label>
                 <input type="text" id="users" name="Users__c" list="userList" required>
@@ -281,7 +281,7 @@
                 <label for="proposal">* Proposal</label>
                 <div class="proposal-group">
                     <span>P-</span>
-                    <input type="text" id="proposal" name="Proposal__c" placeholder="12345" required pattern="\d{5}" maxlength="5">
+                    <input type="text" id="proposal" name="Proposal__c" placeholder="12345" required pattern="\d{5}" maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
             </div>
             <div class="input-group">
@@ -308,6 +308,13 @@
             } else {
                 accountGroup.style.display = "none";
                 proposalGroup.style.display = "none";
+            }
+        }
+
+        function formatProposal() {
+            var proposalInput = document.getElementById('proposal');
+            if (proposalInput.value) {
+                proposalInput.value = 'P-' + proposalInput.value;
             }
         }
     </script>
