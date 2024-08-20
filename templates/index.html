@@ -45,9 +45,10 @@
             position: relative;
         }
 
-        form {
+        form, .message-container {
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
 
         h1 {
@@ -119,6 +120,7 @@
             cursor: pointer;
             background-color: #28a745;
             color: #fff;
+            margin: 5px;
         }
 
         button:hover {
@@ -170,16 +172,16 @@
             <source src="https://videos.pexels.com/video-files/18069235/18069235-uhd_2560_1440_24fps.mp4" type="video/mp4">
         </video>
     </div>
-    <div class="container">
+    <div class="container" id="formContainer">
         <img src="https://wtvglobal.com/wp-content/uploads/2022/05/footer-logo-color.png" alt="Logo" class="logo">
         <h1>New Timesheet</h1>
-        <form action="/submit" method="post" onsubmit="formatProposal()">
+        <form action="/submit" method="post" id="timesheetForm" onsubmit="formatProposal()">
             <div class="input-group">
                 <label for="users">* Users</label>
                 <input type="text" id="users" name="Users__c" list="userList" required>
                 <datalist id="userList">
                     <!-- User options go here -->
-                     <option value="Adrián Ortiz">
+                    <option value="Adrián Ortiz">
                     <option value="Alberto García">
                     <option value="Alex Casariego">
                     <option value="Amit Sanghvi">
@@ -292,6 +294,13 @@
                 <button type="submit">Submit</button>
             </div>
         </form>
+        <div class="message-container" id="messageContainer" style="display:none;">
+            <h2>Thank you, your timesheet has been submitted!</h2>
+            <div class="button-group">
+                <button onclick="submitAnotherTimesheet()">Submit Another Timesheet</button>
+                <button onclick="window.location.href='/timesheets'">Back to Timesheets</button>
+            </div>
+        </div>
     </div>
     <script>
         function toggleFields() {
@@ -316,6 +325,22 @@
             if (proposalInput.value) {
                 proposalInput.value = 'P-' + proposalInput.value;
             }
+        }
+
+        document.getElementById("timesheetForm").onsubmit = function(event) {
+            event.preventDefault();
+            formatProposal();  // Call formatProposal before submission
+            // Simulate form submission delay
+            setTimeout(function() {
+                document.getElementById("formContainer").style.display = "none";
+                document.getElementById("messageContainer").style.display = "flex";
+            }, 1000);
+        }
+
+        function submitAnotherTimesheet() {
+            document.getElementById("timesheetForm").reset();
+            document.getElementById("formContainer").style.display = "block";
+            document.getElementById("messageContainer").style.display = "none";
         }
     </script>
 </body>
