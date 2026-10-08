@@ -4,133 +4,239 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            color-scheme: dark;
+            --brand: #F7AB4E;
+            --ink: #F5F3EF;
+            --muted: rgba(245, 243, 239, 0.64);
+            --faint: rgba(245, 243, 239, 0.42);
+            --bg: #07070A;
+            --line: rgba(255, 255, 255, 0.10);
+            --line-strong: rgba(255, 255, 255, 0.20);
+            --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+            min-height: 100vh;
+            min-height: 100dvh;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
+        /* Aurora background (same as the form page) */
+        .aurora, .grid-fade, .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .aurora { overflow: hidden; }
+        .aurora span {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            mix-blend-mode: screen;
+            animation: drift 24s var(--ease) infinite alternate;
+        }
+        .aurora .a1 { width: 60vmax; height: 60vmax; left: -18vmax; top: -24vmax; opacity: 0.55; background: radial-gradient(circle, #F7AB4E 0%, rgba(247, 171, 78, 0) 62%); }
+        .aurora .a2 { width: 52vmax; height: 52vmax; right: -20vmax; top: 6vmax; opacity: 0.42; background: radial-gradient(circle, #FF6A3D 0%, rgba(255, 106, 61, 0) 62%); animation-duration: 30s; animation-delay: -8s; }
+        .aurora .a3 { width: 48vmax; height: 48vmax; left: 18vmax; bottom: -30vmax; opacity: 0.30; background: radial-gradient(circle, #7B5CFF 0%, rgba(123, 92, 255, 0) 62%); animation-duration: 36s; animation-delay: -14s; }
+        @keyframes drift {
+            0%   { transform: translate3d(0, 0, 0) scale(1); }
+            50%  { transform: translate3d(7vmax, 5vmax, 0) scale(1.12); }
+            100% { transform: translate3d(-5vmax, 9vmax, 0) scale(0.94); }
+        }
+        .grid-fade {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 56px 56px;
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 20%, transparent 78%);
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 20%, transparent 78%);
+        }
+        .grain {
+            opacity: 0.07;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
         }
 
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
+        .shell {
+            position: relative;
             z-index: 1;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 28px;
-        }
-
-        p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .button-group {
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
-            justify-content: center;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
         }
 
+        /* Glass card */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            padding: 44px 40px 40px;
+            border-radius: 26px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            backdrop-filter: blur(24px) saturate(140%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 40px 90px -30px rgba(0, 0, 0, 0.75);
+            animation: cardIn 0.8s var(--ease) both;
+        }
+        .container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            border-radius: inherit;
+            pointer-events: none;
+            background: linear-gradient(140deg, rgba(247, 171, 78, 0.65), rgba(255, 255, 255, 0.08) 32%, rgba(255, 255, 255, 0.03) 64%, rgba(123, 92, 255, 0.45));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.985); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        .wordmark { font-weight: 800; font-size: 26px; letter-spacing: -0.05em; line-height: 1; color: #FFFFFF; }
+        .wordmark i {
+            display: inline-block;
+            width: 0.26em;
+            height: 0.26em;
+            margin-left: 0.06em;
+            border-radius: 50%;
+            background: var(--brand);
+            box-shadow: 0 0 14px rgba(247, 171, 78, 0.9);
+        }
+
+        /* Animated success check */
+        .check {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            margin: 30px auto 6px;
+        }
+        .check::before {
+            content: "";
+            position: absolute;
+            inset: -14px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247, 171, 78, 0.35), transparent 65%);
+            animation: glow 2.6s ease-in-out 0.9s infinite alternate;
+        }
+        @keyframes glow { from { opacity: 0.5; transform: scale(0.92); } to { opacity: 1; transform: scale(1.06); } }
+        .check svg { position: relative; display: block; width: 100%; height: 100%; }
+        .check circle {
+            fill: rgba(247, 171, 78, 0.10);
+            stroke: var(--brand);
+            stroke-width: 2.5;
+            stroke-dasharray: 240;
+            stroke-dashoffset: 240;
+            animation: draw 0.8s var(--ease) 0.25s forwards;
+        }
+        .check path {
+            fill: none;
+            stroke: var(--brand);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: draw 0.5s var(--ease) 0.85s forwards;
+        }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+
+        h1 {
+            margin: 18px 0 10px;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #FFFFFF 30%, rgba(255, 255, 255, 0.62));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        p { margin: 0 0 32px; font-size: 16px; line-height: 1.5; color: var(--muted); }
+
+        .button-group { display: flex; flex-direction: column; gap: 12px; }
         button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            position: relative;
+            width: 100%;
+            height: 54px;
+            border: 0;
+            border-radius: 15px;
+            overflow: hidden;
             cursor: pointer;
-            background-color: #28a745;
-            color: #fff;
-            margin-bottom: 10px;
-            width: 200px;
+            font: inherit;
+            font-size: 15.5px;
+            font-weight: 700;
+            transition: transform 0.2s var(--ease), box-shadow 0.25s ease, background-color 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+        }
+        button:first-child {
+            color: #1A1206;
+            background: linear-gradient(135deg, #FFCB85 0%, #F7AB4E 45%, #F2893C 100%);
+            box-shadow: 0 14px 34px -12px rgba(247, 171, 78, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+        }
+        button:first-child::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.6) 50%, transparent 70%);
+            transform: translateX(-120%);
+            animation: shimmer 3.4s ease-in-out 1.6s infinite;
+        }
+        @keyframes shimmer { 0% { transform: translateX(-120%); } 45%, 100% { transform: translateX(120%); } }
+        button:first-child:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 20px 44px -12px rgba(247, 171, 78, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.55); }
+        button + button {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--line);
+        }
+        button + button:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--line-strong); }
+        button:active { transform: translateY(1px) scale(0.99); }
+        button:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+
+        .foot { margin-top: 22px; font-size: 12.5px; color: var(--faint); letter-spacing: 0.02em; text-align: center; }
+        .foot b { color: var(--muted); font-weight: 600; }
+
+        @media (max-width: 600px) {
+            .container { padding: 32px 20px 24px; border-radius: 22px; }
+            h1 { font-size: 28px; }
+            p { font-size: 15px; }
         }
 
-        button:hover {
-            background-color: #218838;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            p {
-                font-size: 16px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 8px 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            p {
-                font-size: 14px;
-            }
-
-            button {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            .check circle, .check path { stroke-dashoffset: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="video-background">
-        <video autoplay loop muted>
-            <source src="https://videos.pexels.com/video-files/18069235/18069235-uhd_2560_1440_24fps.mp4" type="video/mp4">
-        </video>
-    </div>
+    <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+    <div class="grid-fade" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="shell">
     <div class="container">
+        <span class="wordmark" aria-label="WTV">wtv<i></i></span>
+        <div class="check" aria-hidden="true">
+            <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="38"/><path d="M27 43.5l10 10 20-21"/></svg>
+        </div>
         <h1>Thank You!</h1>
         <p>Your timesheet has been successfully submitted.</p>
         <div class="button-group">
             <button onclick="window.location.href='/'">Submit Another Timesheet</button>
             <button onclick="window.location.href='/'">Back to Timesheet</button>
         </div>
+    </div>
+    <p class="foot"><b>WTV</b> &middot; Internal timesheet</p>
     </div>
 </body>
 </html>
