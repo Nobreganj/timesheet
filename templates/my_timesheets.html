@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The URL is a private link: keep it out of search engines and out of Referer headers. -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <title>My timesheets &middot; wtv.Timesheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --brand: #F7AB4E;
+            --bar: #D07A24;
+            --bar-hover: #F7AB4E;
+            --ink: #F5F3EF;
+            --muted: rgba(245, 243, 239, 0.64);
+            --faint: rgba(245, 243, 239, 0.42);
+            --bg: #07070A;
+            --line: rgba(255, 255, 255, 0.10);
+            --line-soft: rgba(255, 255, 255, 0.07);
+            --line-strong: rgba(255, 255, 255, 0.20);
+            --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Aurora background (same as the form page) */
+        .aurora, .grid-fade, .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .aurora { overflow: hidden; }
+        .aurora span { position: absolute; border-radius: 50%; filter: blur(70px); mix-blend-mode: screen; animation: drift 24s var(--ease) infinite alternate; }
+        .aurora .a1 { width: 60vmax; height: 60vmax; left: -18vmax; top: -24vmax; opacity: 0.5; background: radial-gradient(circle, #F7AB4E 0%, rgba(247, 171, 78, 0) 62%); }
+        .aurora .a2 { width: 52vmax; height: 52vmax; right: -20vmax; top: 6vmax; opacity: 0.38; background: radial-gradient(circle, #FF6A3D 0%, rgba(255, 106, 61, 0) 62%); animation-duration: 30s; animation-delay: -8s; }
+        .aurora .a3 { width: 48vmax; height: 48vmax; left: 18vmax; bottom: -30vmax; opacity: 0.28; background: radial-gradient(circle, #7B5CFF 0%, rgba(123, 92, 255, 0) 62%); animation-duration: 36s; animation-delay: -14s; }
+        @keyframes drift {
+            0%   { transform: translate3d(0, 0, 0) scale(1); }
+            50%  { transform: translate3d(7vmax, 5vmax, 0) scale(1.12); }
+            100% { transform: translate3d(-5vmax, 9vmax, 0) scale(0.94); }
+        }
+        .grid-fade {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 56px 56px;
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 25%, #000 20%, transparent 78%);
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 25%, #000 20%, transparent 78%);
+        }
+        .grain {
+            opacity: 0.07;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        }
+
+        .shell { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 40px 20px 56px; }
+
+        .glass {
+            position: relative;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            backdrop-filter: blur(24px) saturate(140%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 30px 80px -30px rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--line-soft);
+            animation: rise 0.7s var(--ease) both;
+        }
+        @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+        /* Header */
+        .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .wordmark { font-weight: 800; font-size: 28px; letter-spacing: -0.05em; line-height: 1; color: #FFFFFF; text-decoration: none; }
+        .wordmark i { display: inline-block; width: 0.26em; height: 0.26em; margin-left: 0.06em; border-radius: 50%; background: var(--brand); box-shadow: 0 0 14px rgba(247, 171, 78, 0.9); }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 13px;
+            font: inherit;
+            font-size: 14.5px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #1A1206;
+            background: linear-gradient(135deg, #FFCB85 0%, #F7AB4E 45%, #F2893C 100%);
+            box-shadow: 0 12px 30px -12px rgba(247, 171, 78, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            transition: transform 0.2s var(--ease), filter 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        .btn:focus-visible, .tab:focus-visible, .bar-col:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+
+        h1 {
+            margin: 40px 0 6px;
+            font-size: clamp(30px, 5vw, 42px);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #FFFFFF 30%, rgba(255, 255, 255, 0.62));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .sub { margin: 0; color: var(--muted); font-size: 15.5px; line-height: 1.5; }
+
+        /* Year tabs */
+        .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 18px; }
+        .tab {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 8px;
+            min-height: 40px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.035);
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+        .tab small { font-size: 12.5px; font-weight: 500; color: var(--faint); }
+        .tab:hover { border-color: var(--line-strong); color: var(--ink); }
+        .tab[aria-current="page"] { color: #1A1206; background: var(--brand); border-color: var(--brand); }
+        .tab[aria-current="page"] small { color: rgba(26, 18, 6, 0.7); }
+
+        /* Stat tiles */
+        .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+        .stat { padding: 18px 20px; }
+        .stat-label { font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+        .stat-value { margin-top: 8px; font-size: 30px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); }
+        .stat-value small { font-size: 15px; font-weight: 600; color: var(--muted); margin-left: 3px; }
+
+        /* Monthly bars: one series, one hue, no legend; the title names it */
+        .chart { margin: 12px 0 0; padding: 20px 20px 14px; }
+        .chart figcaption { display: flex; justify-content: space-between; gap: 12px; font-size: 13.5px; font-weight: 600; color: var(--muted); margin-bottom: 14px; }
+        .chart figcaption span { color: var(--faint); font-weight: 500; }
+        .bars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }
+        .bar-col { position: relative; display: flex; flex-direction: column; align-items: stretch; cursor: default; border-radius: 6px; outline: none; }
+        .bar-track { position: relative; height: 140px; display: flex; align-items: flex-end; justify-content: center; border-bottom: 1px solid var(--line-strong); }
+        .bar { width: min(26px, 70%); min-height: 0; border-radius: 4px 4px 0 0; background: var(--bar); transition: background-color 0.15s ease; animation: grow 0.8s var(--ease) both; transform-origin: bottom; }
+        @keyframes grow { from { transform: scaleY(0); } to { transform: none; } }
+        .bar-peak { position: absolute; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: var(--ink); white-space: nowrap; margin-bottom: 4px; }
+        .bar-label { padding-top: 8px; text-align: center; font-size: 11.5px; color: var(--faint); }
+        .bar-col:hover .bar, .bar-col:focus-visible .bar { background: var(--bar-hover); }
+        .bar-col:hover .bar-label, .bar-col:focus-visible .bar-label { color: var(--ink); }
+        .tip {
+            position: absolute;
+            bottom: calc(100% - 22px);
+            left: 50%;
+            z-index: 3;
+            transform: translate(-50%, 4px);
+            padding: 7px 10px;
+            border-radius: 9px;
+            background: #1B1A1E;
+            border: 1px solid var(--line-strong);
+            box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.7);
+            font-size: 12.5px;
+            color: var(--muted);
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .tip b { color: var(--ink); }
+        .bar-col:hover .tip, .bar-col:focus-visible .tip { opacity: 1; transform: translate(-50%, 0); }
+        .bar-col:first-child .tip { left: 0; transform: translate(0, 4px); }
+        .bar-col:first-child:hover .tip, .bar-col:first-child:focus-visible .tip { transform: none; }
+        .bar-col:last-child .tip { left: auto; right: 0; transform: translate(0, 4px); }
+        .bar-col:last-child:hover .tip, .bar-col:last-child:focus-visible .tip { transform: none; }
+
+        /* Entries */
+        .month { margin-top: 28px; }
+        .month-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px 10px; }
+        .month-head h2 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+        .month-head span { font-size: 13.5px; color: var(--muted); }
+        .entries { list-style: none; margin: 0; padding: 4px 0; }
+        .entry { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 16px; align-items: start; padding: 14px 20px; border-top: 1px solid var(--line-soft); }
+        .entry:first-child { border-top: 0; }
+        .when { text-align: center; line-height: 1.1; padding-top: 2px; }
+        .when b { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+        .when span { font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+        .what h3 { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.35; }
+        .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+        .chip { padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); font-size: 12px; font-weight: 600; color: var(--muted); }
+        .chip.ref { color: var(--brand); border-color: rgba(247, 171, 78, 0.35); }
+        .desc { margin: 8px 0 0; font-size: 14px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+        .hrs { padding: 6px 11px; border-radius: 10px; background: rgba(247, 171, 78, 0.12); border: 1px solid rgba(247, 171, 78, 0.28); font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+        /* Empty / invalid / error states */
+        .notice { margin-top: 40px; padding: 40px 32px; text-align: center; }
+        .notice h1 { margin: 0 0 10px; font-size: 28px; }
+        .notice p { margin: 0 auto 26px; max-width: 420px; color: var(--muted); line-height: 1.55; }
+
+        .foot { margin-top: 36px; font-size: 12.5px; color: var(--faint); text-align: center; line-height: 1.6; }
+        .foot b { color: var(--muted); font-weight: 600; }
+
+        @media (max-width: 640px) {
+            .shell { padding: 22px 12px 40px; }
+            h1 { margin-top: 30px; }
+            .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stats .stat:last-child { grid-column: 1 / -1; }
+            .stat { padding: 14px 16px; }
+            .stat-value { font-size: 24px; }
+            .chart { padding: 16px 12px 10px; }
+            .bar-track { height: 110px; }
+            .bar-label { font-size: 10px; }
+            .entry { grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding: 14px 16px; }
+            .hrs { grid-column: 2; justify-self: start; margin-top: -2px; }
+            .notice { padding: 32px 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+    <div class="grid-fade" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="shell">
+        <header class="top">
+            <a class="wordmark" href="{{ url_for('index') }}" aria-label="WTV timesheet">wtv<i></i></a>
+            <a class="btn" href="{{ url_for('index') }}">New timesheet <span aria-hidden="true">&rarr;</span></a>
+        </header>
+
+        {% if state == 'invalid' %}
+        <section class="glass notice">
+            <h1>This link doesn&rsquo;t work</h1>
+            <p>It may have been copied incompletely. Use the &ldquo;View all my timesheets&rdquo; button in your latest timesheet confirmation email.</p>
+            <a class="btn" href="{{ url_for('index') }}">Go to the timesheet form</a>
+        </section>
+
+        {% elif state == 'error' %}
+        <section class="glass notice">
+            <h1>We couldn&rsquo;t load your timesheets</h1>
+            <p>Salesforce didn&rsquo;t respond just now. Please refresh in a minute; your submissions are safe.</p>
+            <a class="btn" href="">Try again</a>
+        </section>
+
+        {% elif state == 'empty' %}
+        <h1>Hi {{ first_name }}</h1>
+        <p class="sub">Your timesheet history will appear here.</p>
+        <section class="glass notice">
+            <h1>No timesheets yet</h1>
+            <p>Nothing has been logged under &ldquo;{{ user }}&rdquo; so far. Entries show up here as soon as you submit them.</p>
+            <a class="btn" href="{{ url_for('index') }}">Log your first timesheet</a>
+        </section>
+
+        {% else %}
+        <h1>Hi {{ first_name }}</h1>
+        <p class="sub">Everything you&rsquo;ve logged as {{ user }}, year by year.</p>
+
+        <nav class="tabs" aria-label="Year">
+            {% for y, hrs in year_totals.items() %}
+            <a class="tab" href="?year={{ y }}"{% if y == year %} aria-current="page"{% endif %}>{{ y }} <small>{{ hrs|hours }} h</small></a>
+            {% endfor %}
+        </nav>
+
+        <div class="stats">
+            <div class="glass stat">
+                <div class="stat-label">Hours in {{ year }}</div>
+                <div class="stat-value">{{ total_hours|hours }}<small>h</small></div>
+            </div>
+            <div class="glass stat">
+                <div class="stat-label">Entries</div>
+                <div class="stat-value">{{ entry_count }}</div>
+            </div>
+            <div class="glass stat">
+                <div class="stat-label">Busiest month</div>
+                <div class="stat-value">{{ busiest or '&ndash;'|safe }}</div>
+            </div>
+        </div>
+
+        <figure class="glass chart">
+            <figcaption>Hours per month <span>{{ year }}</span></figcaption>
+            {% set peak = bars|map(attribute='hours')|max %}
+            <ul class="bars">
+                {% for b in bars %}
+                <li class="bar-col" tabindex="0" aria-label="{{ b.name }}: {{ b.hours|hours }} hours">
+                    <div class="bar-track">
+                        {% if b.hours %}
+                        {% if b.hours == peak %}<span class="bar-peak" style="bottom: {{ b.pct }}%">{{ b.hours|hours }}</span>{% endif %}
+                        <div class="bar" style="height: {{ b.pct }}%; animation-delay: {{ loop.index0 * 30 }}ms"></div>
+                        {% endif %}
+                    </div>
+                    <div class="bar-label" aria-hidden="true">{{ b.label }}</div>
+                    <div class="tip" aria-hidden="true">{{ b.name }} &middot; <b>{{ b.hours|hours }} h</b></div>
+                </li>
+                {% endfor %}
+            </ul>
+        </figure>
+
+        {% for month_name, month_total, items in months %}
+        <section class="month">
+            <div class="month-head">
+                <h2>{{ month_name }}</h2>
+                <span>{{ month_total|hours }} h &middot; {{ items|length }} {{ 'entry' if items|length == 1 else 'entries' }}</span>
+            </div>
+            <ul class="glass entries">
+                {% for e in items %}
+                <li class="entry">
+                    <div class="when"><b>{{ e.date.day }}</b><span>{{ e.date.strftime('%a') }}</span></div>
+                    <div class="what">
+                        <h3>{{ e.work_type or e.project_work_type or 'Timesheet entry' }}</h3>
+                        <div class="meta">
+                            {% if e.project_work_type %}<span class="chip">{{ e.project_work_type }}</span>{% endif %}
+                            {% if e.proposal %}<span class="chip ref">{{ e.proposal }}</span>{% endif %}
+                            {% if e.account %}<span class="chip ref">{{ e.account }}</span>{% endif %}
+                        </div>
+                        {% if e.description %}<p class="desc">{{ e.description }}</p>{% endif %}
+                    </div>
+                    <div class="hrs">{{ e.hours|hours }} h</div>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+        {% endif %}
+
+        <p class="foot"><b>WTV</b> &middot; This is your private link. Bookmark it, and don&rsquo;t share it.</p>
+    </div>
+</body>
+</html>
