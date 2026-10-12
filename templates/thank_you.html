@@ -166,6 +166,26 @@
         }
         p { margin: 0 0 32px; font-size: 16px; line-height: 1.5; color: var(--muted); }
 
+        /* Submitted-values summary */
+        .summary {
+            margin: -8px 0 28px;
+            padding: 18px 20px 6px;
+            text-align: left;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.035);
+            animation: cardIn 0.6s var(--ease) 0.5s both;
+        }
+        .summary[hidden] { display: none; }
+        .summary-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+        .summary h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand); }
+        .summary-time { font-size: 12.5px; color: var(--faint); }
+        .summary dl { display: grid; grid-template-columns: auto 1fr; margin: 0; }
+        .summary dt, .summary dd { padding: 11px 0; border-top: 1px solid rgba(255, 255, 255, 0.07); font-size: 14px; line-height: 1.4; }
+        .summary dt { padding-right: 16px; color: var(--muted); white-space: nowrap; }
+        .summary dd { margin: 0; color: var(--ink); font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+        .summary dt:first-of-type, .summary dd:first-of-type { border-top: 0; }
+
         .button-group { display: flex; flex-direction: column; gap: 12px; }
         button {
             position: relative;
@@ -204,6 +224,9 @@
         button:active { transform: translateY(1px) scale(0.99); }
         button:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 
+        /* Note that the "My timesheets" link is in the confirmation email */
+        .container .history-note { margin: 20px 0 0; font-size: 13px; line-height: 1.5; color: var(--faint); }
+
         .foot { margin-top: 22px; font-size: 12.5px; color: var(--faint); letter-spacing: 0.02em; text-align: center; }
         .foot b { color: var(--muted); font-weight: 600; }
 
@@ -231,12 +254,52 @@
         </div>
         <h1>Thank You!</h1>
         <p>Your timesheet has been successfully submitted.</p>
+        <section class="summary" id="summary" hidden>
+            <div class="summary-head">
+                <h2>What you submitted</h2>
+                <span class="summary-time" id="summaryTime"></span>
+            </div>
+            <dl id="summaryList"></dl>
+        </section>
         <div class="button-group">
             <button onclick="window.location.href='/'">Submit Another Timesheet</button>
             <button onclick="window.location.href='/'">Back to Timesheet</button>
         </div>
+        {% if link_emailed %}
+        <p class="history-note">Your confirmation email has a private link to every timesheet you&rsquo;ve logged.</p>
+        {% endif %}
     </div>
     <p class="foot"><b>WTV</b> &middot; Internal timesheet</p>
     </div>
+    <script>
+        /* Show the copy of the submitted values saved by the form page (same browser tab only). */
+        (function () {
+            var saved;
+            try { saved = JSON.parse(sessionStorage.getItem('wtvLastTimesheet')); } catch (err) { return; }
+            if (!saved || !saved.rows || Date.now() - saved.at > 30 * 60 * 1000) return;
+
+            function formatDate(v) {
+                var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+                if (!m) return v;
+                return new Date(+m[1], m[2] - 1, +m[3]).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            }
+
+            var list = document.getElementById('summaryList');
+            saved.rows.forEach(function (row) {
+                if (!row.value) return;
+                var dt = document.createElement('dt');
+                var dd = document.createElement('dd');
+                dt.textContent = row.label;
+                dd.textContent = /Date__c$/.test(row.name) ? formatDate(row.value) : row.value;
+                list.appendChild(dt);
+                list.appendChild(dd);
+            });
+            if (!list.children.length) return;
+
+            document.getElementById('summaryTime').textContent =
+                new Date(saved.at).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('summary').hidden = false;
+        })();
+    </script>
 </body>
 </html>
