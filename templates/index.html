@@ -670,6 +670,25 @@
             form.addEventListener('focusout', function (e) { var g = groupOf(e.target); if (g) g.classList.remove('is-focused'); });
 
             form.addEventListener('submit', function () { if (submit) submit.classList.add('is-loading'); });
+
+            /* Keep a copy of exactly what is being sent so the thank-you page can show it.
+               Runs after the inline onsubmit handler, so it sees the final values (e.g. "P-12345", End Date). */
+            form.addEventListener('submit', function () {
+                try {
+                    var rows = [];
+                    new FormData(form).forEach(function (value, name) {
+                        var el = form.elements[name];
+                        var label = el && el.id && form.querySelector('label[for="' + el.id + '"]');
+                        rows.push({
+                            name: name,
+                            label: label ? label.textContent.replace(/^\*\s*/, '') : (name === 'End_Date__c' ? 'End Date' : name),
+                            value: String(value),
+                            type: el && el.type
+                        });
+                    });
+                    sessionStorage.setItem('wtvLastTimesheet', JSON.stringify({ at: Date.now(), rows: rows }));
+                } catch (err) { /* storage unavailable: the thank-you page just won't show the summary */ }
+            });
             window.addEventListener('pageshow', function () { if (submit) submit.classList.remove('is-loading'); });
 
             Array.prototype.forEach.call(document.querySelectorAll('[data-spotlight]'), function (el) {
